@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games</title>
+    <style>
+        body{
+            width: 100%;
+            background-color: (25,25,25);
+            color: white;
+            font-family: Arial;
+            margin-top: 12%;
+            margin-left:0px;
+            background-image:url('./roadbackground.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+           
+        }
+        .move-buttton
+            {
+                width : 120px;
+                height : 120px;
+                border-radius: 60px;
+                border-color: cadetblue;
+                margin-left: 1.3%;
+
+            }
+            .move-icon{
+                height: 50px;
+            }
+            .reset-score{
+                background-color:rgb(67, 37, 1);
+                border-radius:20px;
+                border-color: cadetblue;
+                font-size: 15px;
+                padding: 8px 15px;
+                cursor: pointer;   
+                margin-left: 30%;             
+            }
+            .js-emoji-result-display
+            {
+                margin-left: 20%;
+            }
+            .js-score
+            {
+                margin-left: 20%;
+                color: rgb(90, 53, 6);
+            }
+            .js-result
+            {
+                margin-left: 20%;
+            }
+            .head{
+                margin-bottom: 10%;
+                margin-left: 14%;
+                font-size: 30px;
+                font-style: oblique;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                font-weight: 200;
+                color: rgb(56, 58, 11);
+            }
+            #video
+            {
+                margin-left: 20%;
+                margin-right: 15%;
+            }
+            .img
+            {
+                width: 80px;
+                margin-left:17%;
+            }
+            .lol 
+            {
+               width: 10%;
+            }
+           
+            .js-name{
+                margin-left: 20%;
+                border-radius: 5px;
+                border-color: cadetblue;
+                padding:.4em;
+            }
+            .js-submit
+            {
+                border-radius: 10px;
+                background-color:rgb(67, 37, 1);
+                border-color: cadetblue;
+                padding:.4em;
+
+            }
+            .js-animation
+            {
+                width: 30%;
+                margin-left: 33%;
+                border-radius: 100%;
+            }
+            .js-message
+            {
+                font-size: 10px;
+                font-style: oblique;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                font-weight: 200;
+                color: rgb(44, 26, 3);
+                margin-left: 7%;
+
+            }
+            .js-statement
+            {
+                font-size: 15px;
+                color: rgb(90, 53, 6);
+                margin-left: 10px;
+
+                
+
+            }
+    </style>
+    <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body>
+    <p><img class="js-animation" src="./animationimage.jpeg"></p>
+    <input  placeholder="what's your name...?" class="js-name" onkeydown=" submitenter(event);">
+    <button onclick="submitbt();" class="js-submit">submit</button>
+    <p class="js-message"></p>
+
+    <p class="head">Rock Paper Scissors</p>
+    <button onclick="makemove('rock');" class="move-buttton"><img class="move-icon" src="./rock-emoji.png"></button>
+    <button onclick="makemove('paper');" class="move-buttton"><img class="move-icon" src="./paper-emoji.png"></button>
+    <button onclick="makemove('scissors');" class="move-buttton"><img class="move-icon" src="./scissors-emoji.png"></button>
+    <p class="js-result"></p>
+    <p class="js-emoji-result-display"></p>
+    <p class="js-score"></p>
+    <button onclick="resetScore();" class="reset-score">Reset score</button>
+    <p class="js-statement">if you score high...play the song down below and dance  &#128514;</p>
+    <a id="video" href="video.html">
+        <img class="img" src="./videologo.png">
+    </a>
+    
+    
+    
+    
+
+
+
+
+    <script>
+        let inputelement = document.querySelector('.js-name');
+        
+        function submitenter(event)
+        {
+            if(event.key === 'Enter')
+            {
+                submitbt();
+            }
+        }
+        function submitbt()
+        {
+            document.querySelector('.js-message').innerHTML = `Hi.. ${inputelement.value},
+            aap bohot swagat hai &#128522;
+            I hope you enjoy the game down below &#128071;`;
+        }
+        /*function videoo()
+        {
+            //create  the player
+            const player = new YT.Player('video', {
+                height: '360',
+                width: '640',
+                videoId: 'https://youtu.be/dQw4w9WgXcQ'
+            });
+        }*/
+        
+        let score = {
+            win:0,
+            lose:0,
+            tie:0
+        };
+        const savescore = JSON.parse(localStorage.getItem('score'));
+        if(savescore)
+        {
+            score = savescore;
+        }
+        updatescore();
+        function makemove(choice)
+        {
+            const computerMove = pickcomputerMove();
+            const result = document.querySelector('.js-result');
+            
+            if(choice === computerMove)
+            {
+                result.innerHTML = 'Tie.';
+                score.tie +=1;
+            }
+            else if((choice === 'rock' && computerMove === 'scissors') ||(choice === 'paper' && computerMove === 'rock') ||(choice === 'scissors' && computerMove === 'paper'))
+            {
+                result.innerHTML = `${inputelement.value} win.`;
+                score.win +=1;
+            }
+            else
+            {
+                result.innerHTML = `${inputelement.value} lose.`;
+                score.lose +=1;
+            }
+
+            const movelement = document.querySelector('.js-emoji-result-display');
+            movelement.innerHTML = `
+                you 
+                <img src="./${choice}-emoji.png" class="move-icon"> <img src="./${computerMove}-emoji.png" class="move-icon"> computer`;
+
+            updatescore();
+            localStorage.setItem('score',JSON.stringify(score));
+            
+        }
+        function pickcomputerMove()
+        {
+            const randomN = Math.random();
+            let computerMove = '';
+            if(randomN < 1/3)
+            {
+                computerMove = 'rock';
+            }
+            else if(randomN < 2/3)
+            {
+                computerMove = 'paper';
+            }
+            else{
+                computerMove = 'scissors';
+            }
+            return computerMove;
+        }
+        function updatescore()
+        {
+            document.querySelector('.js-score').innerHTML = `
+                Wins: ${score.win}, losses: ${score.lose}, Ties: ${score.tie}`;
+        }
+        function resetScore()
+        {
+            score={
+                win:0,
+                lose:0,
+                tie:0
+            };
+            updatescore();
+            localStorage.removeItem('score');
+        }
+    </script>
+</body>
+</html>
